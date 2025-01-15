@@ -91,6 +91,8 @@ function M.from_pattern(pattern, groups, severity_map, defaults, opts)
     for i, match in ipairs(matches) do
       captures[groups[i]] = match
     end
+
+    captures.file = captures.file:match("[^\\/]*$")
     if captures.file then
       local path
       if (string.match(captures.file, '^%w:') or vim.startswith(captures.file, '/')) then
