@@ -45,14 +45,21 @@ require('lint').linters_by_ft = {
 ```
 
 To get the `filetype` of a buffer you can run `:= vim.bo.filetype`.
+The `filetype` can also be a compound `filetype`. For example, if you have a buffer
+with a `filetype` like `yaml.ghaction`, you can use either `ghaction`, `yaml` or
+the full `yaml.ghaction` as key in the `linters_by_ft` table and the linter
+will be picked up in that buffer. This is useful for linters like
+[actionlint][actionlint] in combination with `vim.filetype` patterns like
+`[".*/.github/workflows/.*%.yml"] = "yaml.ghaction",`
 
-Then setup a autocmd to trigger linting. For example:
+
+Then setup a `autocmd` to trigger linting. For example:
 
 ```vimL
 au BufWritePost * lua require('lint').try_lint()
 ```
 
-or with Lua autocmds:
+or with Lua auto commands:
 
 ```lua
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
@@ -70,7 +77,7 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 ```
 
 Some linters require a file to be saved to disk, others support linting `stdin`
-input. For such linters you could also define a more aggressive autocmd, for
+input. For such linters you could also define a more aggressive `autocmd`, for
 example on the `InsertLeave` or `TextChanged` events.
 
 
@@ -220,6 +227,7 @@ Other dedicated linters that are built-in are:
 | [tlint][tlint]                         | `tlint`                |
 | [trivy][trivy]                         | `trivy`                |
 | [ts-standard][ts-standard]             | `ts-standard`          |
+| [twig-cs-fixer][twig-cs-fixer]         | `twig-cs-fixer`        |
 | [typos][typos]                         | `typos`                |
 | [Vala][vala-lint]                      | `vala_lint`            |
 | [Vale][8]                              | `vale`                 |
@@ -484,7 +492,7 @@ busted tests/
 [pydocstyle]: https://www.pydocstyle.org/en/stable/
 [prisma-lint]: https://github.com/loop-payments/prisma-lint
 [checkpatch]: https://docs.kernel.org/dev-tools/checkpatch.html
-[checkstyle]: https://checkstyle.sourceforge.io/
+[checkstyle]: https://checkstyle.org/
 [jshint]: https://jshint.com/
 [jsonlint]: https://github.com/zaach/jsonlint
 [rflint]: https://github.com/boakley/robotframework-lint
@@ -594,3 +602,4 @@ busted tests/
 [slang]: https://github.com/MikePopoloski/slang
 [zizmor]: https://github.com/woodruffw/zizmor
 [ts-standard]: https://github.com/standard/ts-standard
+[twig-cs-fixer]: https://github.com/VincentLanglet/Twig-CS-Fixer
