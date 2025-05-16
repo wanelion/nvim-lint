@@ -5,21 +5,54 @@ local severities = {
   convention = vim.diagnostic.severity.HINT,
 }
 
+-- Gets the correct arguments to run based on the version of golangci-lint
+local getArgs = function()
+  local ok, output = pcall(vim.fn.system, { 'golangci-lint', 'version' })
+  if not ok then
+    return
+  end
+
+  -- The golangci-lint install script and prebuilt binaries strip the v from the version
+  --   tag so both strings must be checked
+  if string.find(output, 'version v1') or string.find(output, 'version 1') then
+    return {
+      'run',
+      '--out-format',
+      'json',
+      '--issues-exit-code=0',
+      '--show-stats=false',
+      '--print-issued-lines=false',
+      '--print-linter-name=false',
+      function()
+        return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
+      end
+    }
+  end
+
+  return {
+    'run',
+    '--output.json.path=stdout',
+    -- Overwrite values possibly set in .golangci.yml
+    '--output.text.path=',
+    '--output.tab.path=',
+    '--output.html.path=',
+    '--output.checkstyle.path=',
+    '--output.code-climate.path=',
+    '--output.junit-xml.path=',
+    '--output.teamcity.path=',
+    '--output.sarif.path=',
+    '--issues-exit-code=0',
+    '--show-stats=false',
+    function()
+      return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
+    end,
+  }
+end
+
 return {
   cmd = 'golangci-lint',
   append_fname = false,
-  args = {
-    'run',
-    '--out-format',
-    'json',
-    '--issues-exit-code=0',
-    '--show-stats=false',
-    '--print-issued-lines=false',
-    '--print-linter-name=false',
-    function()
-      return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
-    end
-  },
+  args = getArgs(),
   stream = 'stdout',
   parser = function(output, bufnr, cwd)
     if output == '' then
