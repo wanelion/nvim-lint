@@ -2,37 +2,33 @@ local function get_file_name()
   return vim.api.nvim_buf_get_name(0)
 end
 
+local severities = {
+  error = vim.diagnostic.severity.ERROR,
+  warning = vim.diagnostic.severity.WARN,
+  info = vim.diagnostic.severity.INFO,
+}
+
 return {
-  cmd = 'actionlint',
+  cmd = "rumdl",
+  args = { "check", "--stdin-filename", get_file_name, "--output", "json", "-" },
   stdin = true,
-  args = {
-    '-format',
-    '{{json .}}',
-    '-stdin-filename',
-    get_file_name,
-    '-',
-  },
+  stream = "stderr",
   ignore_exitcode = true,
   parser = function(output)
-    if output == '' then
-      return {}
-    end
     local decoded = vim.json.decode(output)
-    if decoded == nil then
-      return {}
-    end
     local diagnostics = {}
+
     for _, item in ipairs(decoded) do
       table.insert(diagnostics, {
         lnum = item.line - 1,
-        end_lnum = item.line - 1,
         col = item.column - 1,
-        end_col = item.end_column,
-        severity = vim.diagnostic.severity.WARN,
-        source = 'actionlint: ' .. item.kind,
+        severity = assert(severities[item.severity], "missing mapping for severity " .. item.severity),
         message = item.message,
+        source = "rumdl",
+        code = item.rule,
       })
     end
+
     return diagnostics
   end,
 }
