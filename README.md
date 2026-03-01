@@ -84,6 +84,13 @@ example on the `InsertLeave` or `TextChanged` events.
 If you want to customize how the diagnostics are displayed, read `:help
 vim.diagnostic.config`.
 
+## Security
+
+Some linters prioritize using an executable relative to the current working
+directory over the executable in `$PATH`. For example the `eslint` linter will
+use `./node_modules/.bin/eslint` if it exists. The executable is executed with
+your users permission. Because of that, you must _not_ call `try_lint()` in
+untrusted repositories.
 
 ## Available Linters
 
@@ -491,12 +498,30 @@ end
 
 Running tests requires [busted][busted].
 
-See [neorocks][neorocks] or [Using Neovim as Lua interpreter with
-Luarocks][neovim-luarocks] for installation instructions.
+```bash
+busted spec/
+```
+
+Or with [luarocks]:
 
 ```bash
-busted tests/
+luarocks test
 ```
+
+If you get an error like:
+
+```text
+E5113: Error while calling lua chunk: ...uarocks/lib/luarocks/rocks-5.1/busted/2.2.0-1/bin/busted:3: module 'busted.runner' not found:
+    no field package.preload['busted.runner']
+```
+
+You need to run `eval $(luarocks path --no-bin)` first.
+
+
+See also:
+
+- [neorocks][neorocks]
+- [Using Neovim as Lua interpreter with Luarocks][neovim-luarocks] for installation instructions.
 
 
 ### Docs
@@ -688,3 +713,4 @@ vimcats -t -f lua/lint.lua lua/lint/parser.lua > doc/lint.txt
 [miss_hit]: https://github.com/florianschanda/miss_hit
 [pyrefly]: https://pyrefly.org/
 [Vacuum]: https://quobix.com/vacuum/
+[luarocks]: https://luarocks.org/
