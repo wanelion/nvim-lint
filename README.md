@@ -115,6 +115,7 @@ Other dedicated linters that are built-in are:
 | [buildifier][buildifier]               | `buildifier`           |
 | [cfn-lint][cfn-lint]                   | `cfn_lint`             |
 | [cfn_nag][cfn_nag]                     | `cfn_nag`              |
+| [checkbashisms][checkbashisms]         | `checkbashisms`
 | [checkmake][checkmake]                 | `checkmake`            |
 | [checkpatch.pl][checkpatch]            | `checkpatch`           |
 | [checkstyle][checkstyle]               | `checkstyle`           |
@@ -187,6 +188,7 @@ Other dedicated linters that are built-in are:
 | [markdownlint][26]                     | `markdownlint`         |
 | [markdownlint-cli2][markdownlint-cli2] | `markdownlint-cli2`    |
 | [markuplint][markuplint]               | `markuplint`           |
+| [mbake][mbake]                         | `mbake`                |
 | [mh_lint][miss_hit]                    | `mh_lint`              |
 | [mlint][34]                            | `mlint`                |
 | [Mypy][11]                             | `mypy`                 |
@@ -617,6 +619,7 @@ vimcats -t -f lua/lint.lua lua/lint/parser.lua > doc/lint.txt
 [nagelfar]: https://nagelfar.sourceforge.net/
 [oelint-adv]: https://github.com/priv-kweihmann/oelint-adv
 [cfn_nag]: https://github.com/stelligent/cfn_nag
+[checkbashisms]: https://tracker.debian.org/pkg/devscripts
 [checkmake]: https://github.com/mrtazz/checkmake
 [ruff]: https://github.com/astral-sh/ruff
 [janet]: https://github.com/janet-lang/janet
@@ -714,3 +717,4 @@ vimcats -t -f lua/lint.lua lua/lint/parser.lua > doc/lint.txt
 [pyrefly]: https://pyrefly.org/
 [Vacuum]: https://quobix.com/vacuum/
 [luarocks]: https://luarocks.org/
+[mbake]: https://github.com/EbodShojaei/bake
